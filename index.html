@@ -1,30 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mobile Phone Offence Dashboard</title>
-  <link rel="stylesheet" href="css/visual.css">
+  <meta charset="UTF-8" />
+  <title>Mobile Phone Use – BITRE Detail Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/visual.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
+  <header class="site-header">
+    <div class="site-header__top">
+      <div class="gov-brand">
+        <span class="gov-brand__title">Australian Transport Statistics</span>
+        <span class="gov-brand__subtitle">Mobile phone use – detailed view</span>
+      </div>
+    </div>
+    <div class="site-header__bottom">
+      <h1>Mobile Phone Use – Road Safety Enforcement, 2024</h1>
+    </div>
+  </header>
 
-  <h1>Mobile Phone Use Offences – Australia 2024</h1>
+  <main class="dashboard">
+    <!-- Sidebar summary -->
+    <aside class="sidebar">
+      <section class="summary-card">
+        <h2>2024 overview (current filters)</h2>
+        <div class="summary-row">
+          <span class="summary-label">Total fines</span>
+          <span id="summaryTotalFines" class="summary-value">–</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Police-issued fines</span>
+          <span id="summaryPoliceFines" class="summary-value">–</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Camera fines</span>
+          <span id="summaryCameraFines" class="summary-value">–</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Arrests</span>
+          <span id="summaryArrests" class="summary-value">–</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Charges</span>
+          <span id="summaryCharges" class="summary-value">–</span>
+        </div>
+      </section>
 
-  <h2>Fines by Age Group</h2>
-  <div id="chart_age"></div>
+      <section class="notes-card">
+        <h3>Notes</h3>
+        <p>
+          This dashboard focuses only on <strong>mobile_phone_use</strong> offences from the BITRE
+          police enforcement dataset for 2024. Use the filters to explore how fines vary by
+          jurisdiction, detection method and age group.
+        </p>
+      </section>
+    </aside>
 
-  <h2>Fines by State</h2>
-  <div id="chart_state"></div>
+    <!-- Main content -->
+    <section class="main-content">
+      <!-- Filters -->
+      <section class="filters-bar">
+        <div class="filter-block">
+          <label for="stateFilter">Jurisdiction</label>
+          <select id="stateFilter">
+            <option value="All">All</option>
+          </select>
+        </div>
 
-  <h2>Monthly Trend</h2>
-  <div id="chart_month"></div>
+        <div class="filter-block">
+          <label for="methodFilter">Detection method</label>
+          <select id="methodFilter">
+            <option value="All">All</option>
+          </select>
+        </div>
 
+        <div class="filter-block">
+          <label for="ageFilter">Age group</label>
+          <select id="ageFilter">
+            <option value="All">All</option>
+          </select>
+        </div>
+
+        <div class="filter-block filter-block--reset">
+          <button id="resetFiltersBtn" type="button">Reset view</button>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="charts-grid">
+        <article class="chart-card">
+          <h2>Fines by age group</h2>
+          <p class="chart-description">
+            Total mobile phone fines by age group for 2024, filtered by jurisdiction and detection
+            method.
+          </p>
+          <div id="chart_age" class="chart-container"></div>
+        </article>
+
+        <article class="chart-card">
+          <h2>Fines by jurisdiction</h2>
+          <p class="chart-description">
+            Comparison of total mobile phone fines across states and territories for 2024,
+            filtered by age group and detection method.
+          </p>
+          <div id="chart_state" class="chart-container"></div>
+        </article>
+
+        <article class="chart-card chart-card--full">
+          <h2>Monthly trend of mobile phone fines (2024)</h2>
+          <p class="chart-description">
+            Month-by-month trend in mobile phone fines across Australia. Filters apply to all
+            charts to support linked exploration.
+          </p>
+          <div id="chart_month" class="chart-container"></div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Data source: BITRE police enforcement 2024 fines dataset (mobile phone offences subset).
+    </p>
+  </footer>
+
+  <!-- JS -->
   <script src="js/utils.js"></script>
   <script src="js/bar_age.js"></script>
   <script src="js/bar_state.js"></script>
   <script src="js/line_month.js"></script>
   <script src="js/main.js"></script>
-
 </body>
 </html>

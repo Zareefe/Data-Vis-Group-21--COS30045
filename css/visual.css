@@ -1,0 +1,282 @@
+/* Base layout */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #0b1724;
+  color: #f5f7fb;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.site-header {
+  background: linear-gradient(90deg, #0c2b4a, #144f8c);
+  color: #ffffff;
+  padding: 12px 32px 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.site-header__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.gov-brand__title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.9;
+  display: block;
+}
+
+.gov-brand__subtitle {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.site-header__bottom h1 {
+  margin: 4px 0 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Layout */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px 24px 24px;
+  flex: 1;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cards */
+
+.summary-card,
+.notes-card,
+.chart-card {
+  background: #101b2a;
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+.summary-card h2,
+.notes-card h3,
+.chart-card h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.summary-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #69b6ff;
+}
+
+.notes-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Filters */
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  background: #101b2a;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+.filter-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+}
+
+.filter-block label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+.filter-block select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #29486b;
+  background-color: #0f2238;
+  color: #f5f7fb;
+  font-size: 0.9rem;
+}
+
+.filter-block--reset {
+  margin-left: auto;
+}
+
+.filter-block button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+  background: #2e7cd4;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.filter-block button:hover {
+  background: #3f91ee;
+  transform: translateY(-1px);
+}
+
+/* Charts */
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.chart-card--full {
+  grid-column: 1 / -1;
+}
+
+.chart-description {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin: 0 0 6px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 340px;
+}
+
+/* SVG styles */
+
+svg {
+  font-family: inherit;
+}
+
+.axis path,
+.axis line {
+  stroke: #5f7b9c;
+  stroke-width: 1px;
+}
+
+.axis text {
+  fill: #d4e0f5;
+  font-size: 0.8rem;
+}
+
+.chart-title {
+  fill: #ffffff;
+}
+
+/* Tooltip */
+
+.chart-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(11, 23, 36, 0.95);
+  color: #f5f7fb;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  border: 1px solid #2e7cd4;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  z-index: 10;
+}
+
+/* Footer */
+
+.site-footer {
+  padding: 10px 24px 16px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  text-align: center;
+  background-color: #0b1724;
+}
+
+/* Responsive */
+
+@media (max-width: 960px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: 2;
+  }
+
+  .main-content {
+    order: 1;
+  }
+}
+
+@media (max-width: 720px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-block--reset {
+    margin-left: 0;
+  }
+}
