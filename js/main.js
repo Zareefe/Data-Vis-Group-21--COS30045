@@ -6,9 +6,10 @@ let currentFilters = {
   method: "All",
   age: "All"
 };
+let activeQuestion = "q1"; // storyboard state
 
-// Load data
-d3.csv("data/police_enforcement_2024_fines-1.csv", (d) => ({
+// Load data from CSV (ensure filename matches your /data folder)
+d3.csv("data/police_enforcement_2024_fines.csv", (d) => ({
   year: +d.YEAR,
   start_date: d.START_DATE,
   end_date: d.END_DATE,
@@ -25,10 +26,11 @@ d3.csv("data/police_enforcement_2024_fines-1.csv", (d) => ({
   allMobileData = data.filter((row) => row.metric === "mobile_phone_use");
 
   initialiseFilters(allMobileData);
+  initialiseStoryboard();
   renderDashboard();
 });
 
-// Initialise filter dropdown values based on data
+// Initialise filter dropdowns from data
 function initialiseFilters(data) {
   const stateSelect = document.getElementById("stateFilter");
   const methodSelect = document.getElementById("methodFilter");
@@ -61,7 +63,6 @@ function initialiseFilters(data) {
     ageSelect.appendChild(opt);
   });
 
-  // Event listeners
   stateSelect.addEventListener("change", (e) => {
     currentFilters.state = e.target.value;
     renderDashboard();
@@ -86,7 +87,25 @@ function initialiseFilters(data) {
   });
 }
 
-// Apply filters and redraw charts
+// Storyboard cards (for now they just highlight; later you can change charts per Q)
+function initialiseStoryboard() {
+  const cards = document.querySelectorAll(".story-card");
+
+  cards.forEach((card) => {
+    card.addEventListener("click", () => {
+      activeQuestion = card.dataset.question;
+
+      cards.forEach((c) => c.classList.remove("story-card--active"));
+      card.classList.add("story-card--active");
+
+      // In future you can switch chart focus based on activeQuestion here.
+      // For now, charts remain the same but the storyboard communicates the story.
+      // Example: you might scroll to a specific chart for each question.
+    });
+  });
+}
+
+// Apply filters to data
 function getFilteredData() {
   let filtered = allMobileData;
 
@@ -105,14 +124,19 @@ function getFilteredData() {
   return filtered;
 }
 
+// Update summary numbers
 function updateSummaryCards(data) {
   const totalFines = d3.sum(data, (d) => d.fines);
   const policeFines = d3.sum(
-    data.filter((d) => d.method && d.method.toLowerCase().includes("police")),
+    data.filter(
+      (d) => d.method && d.method.toLowerCase().includes("police")
+    ),
     (d) => d.fines
   );
   const cameraFines = d3.sum(
-    data.filter((d) => d.method && d.method.toLowerCase().includes("camera")),
+    data.filter(
+      (d) => d.method && d.method.toLowerCase().includes("camera")
+    ),
     (d) => d.fines
   );
   const arrests = d3.sum(data, (d) => d.arrests);
@@ -130,6 +154,7 @@ function updateSummaryCards(data) {
     formatNumber(charges);
 }
 
+// Draw all charts
 function renderDashboard() {
   const filteredData = getFilteredData();
   updateSummaryCards(filteredData);

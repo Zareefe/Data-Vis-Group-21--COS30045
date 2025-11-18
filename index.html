@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Mobile Phone Use – BITRE Detail Dashboard</title>
+  <title>Mobile Phone Use – Road Safety Enforcement, 2024</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/visual.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -10,13 +10,11 @@
 
 <body>
   <header class="site-header">
-    <div class="site-header__top">
-      <div class="gov-brand">
-        <span class="gov-brand__title">Australian Transport Statistics</span>
-        <span class="gov-brand__subtitle">Mobile phone use – detailed view</span>
-      </div>
+    <div class="site-header__brand">
+      <div class="gov-brand__small">AUSTRALIAN TRANSPORT STATISTICS</div>
+      <div class="gov-brand__context">Mobile phone use – detailed view</div>
     </div>
-    <div class="site-header__bottom">
+    <div class="site-header__title">
       <h1>Mobile Phone Use – Road Safety Enforcement, 2024</h1>
     </div>
   </header>
@@ -52,14 +50,14 @@
         <h3>Notes</h3>
         <p>
           This dashboard focuses only on <strong>mobile_phone_use</strong> offences from the BITRE
-          police enforcement dataset for 2024. Use the filters to explore how fines vary by
-          jurisdiction, detection method and age group.
+          police enforcement dataset. Use the filters and research questions to explore how fines
+          vary by jurisdiction, detection method and age group.
         </p>
       </section>
     </aside>
 
-    <!-- Main content -->
-    <section class="main-content">
+    <!-- Main column -->
+    <section class="main-column">
       <!-- Filters -->
       <section class="filters-bar">
         <div class="filter-block">
@@ -88,13 +86,58 @@
         </div>
       </section>
 
-      <!-- Charts -->
+      <!-- Storyboard for the 5 research questions -->
+      <section class="storyboard">
+        <h2 class="storyboard__title">Research Questions &amp; Analysis Storyboard</h2>
+        <div class="storyboard__cards">
+          <button class="story-card story-card--active" data-question="q1">
+            <div class="story-card__header">Q1: Highest offences</div>
+            <div class="story-card__chart-type">[Bar chart]</div>
+            <p class="story-card__body">
+              Which jurisdiction has the highest mobile phone offences per 10,000 licences?
+            </p>
+          </button>
+
+          <button class="story-card" data-question="q2">
+            <div class="story-card__header">Q2: Trend changes</div>
+            <div class="story-card__chart-type">[Line chart]</div>
+            <p class="story-card__body">
+              How have offence rates changed over time (including COVID years)?
+            </p>
+          </button>
+
+          <button class="story-card" data-question="q3">
+            <div class="story-card__header">Q3: COVID effect</div>
+            <div class="story-card__chart-type">[Area chart]</div>
+            <p class="story-card__body">
+              What was the impact of COVID-19 (2020–2021) on enforcement activity?
+            </p>
+          </button>
+
+          <button class="story-card" data-question="q4">
+            <div class="story-card__header">Q4: Detection method</div>
+            <div class="story-card__chart-type">[Stacked bar]</div>
+            <p class="story-card__body">
+              How do camera vs on-road police detection patterns differ between jurisdictions?
+            </p>
+          </button>
+
+          <button class="story-card" data-question="q5">
+            <div class="story-card__header">Q5: Improvement</div>
+            <div class="story-card__chart-type">[Heatmap]</div>
+            <p class="story-card__body">
+              Which jurisdictions show consistent improvement (reductions) over the years?
+            </p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Charts area (responsive, no horizontal scroll) -->
       <section class="charts-grid">
         <article class="chart-card">
           <h2>Fines by age group</h2>
           <p class="chart-description">
-            Total mobile phone fines by age group for 2024, filtered by jurisdiction and detection
-            method.
+            Total mobile phone fines by age group, filtered by jurisdiction and detection method.
           </p>
           <div id="chart_age" class="chart-container"></div>
         </article>
@@ -102,8 +145,8 @@
         <article class="chart-card">
           <h2>Fines by jurisdiction</h2>
           <p class="chart-description">
-            Comparison of total mobile phone fines across states and territories for 2024,
-            filtered by age group and detection method.
+            Comparison of mobile phone fines across states and territories, filtered by age group
+            and detection method.
           </p>
           <div id="chart_state" class="chart-container"></div>
         </article>
@@ -111,22 +154,19 @@
         <article class="chart-card chart-card--full">
           <h2>Monthly trend of mobile phone fines (2024)</h2>
           <p class="chart-description">
-            Month-by-month trend in mobile phone fines across Australia. Filters apply to all
-            charts to support linked exploration.
+            Month-by-month fines across Australia. Filters apply to all charts to support linked
+            exploration.
           </p>
-          <div id="chart_month" class="chart-container"></div>
+          <div id="chart_month" class="chart-container chart-container--tall"></div>
         </article>
       </section>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>
-      Data source: BITRE police enforcement 2024 fines dataset (mobile phone offences subset).
-    </p>
+    <p>Data source: BITRE police enforcement fines dataset (mobile phone use offences).</p>
   </footer>
 
-  <!-- JS -->
   <script src="js/utils.js"></script>
   <script src="js/bar_age.js"></script>
   <script src="js/bar_state.js"></script>

@@ -58,30 +58,27 @@ function drawStateChart(data) {
         .html(
           `<strong>${d.state}</strong><br/>Fines: ${formatNumber(d.total)}`
         )
-        .style("left", event.pageX + 10 + "px")
-        .style("top", event.pageY - 28 + "px");
+        .style("left", `${event.pageX + 10}px`)
+        .style("top", `${event.pageY - 28}px`);
     })
-    .on("mouseleave", () => {
-      tooltip.style("opacity", 0);
-    });
+    .on("mouseleave", () => tooltip.style("opacity", 0));
 
-  // Axis labels
   chart
     .append("text")
     .attr("x", innerWidth / 2)
-    .attr("y", innerHeight + 40)
+    .attr("y", innerHeight + 38)
     .attr("text-anchor", "middle")
-    .attr("fill", "#d4e0f5")
-    .attr("font-size", "0.8rem")
+    .attr("fill", "#d7e2f8")
+    .attr("font-size", "0.78rem")
     .text("Jurisdiction");
 
   chart
     .append("text")
     .attr("x", -innerHeight / 2)
-    .attr("y", -56)
+    .attr("y", -58)
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "middle")
-    .attr("fill", "#d4e0f5")
-    .attr("font-size", "0.8rem")
+    .attr("fill", "#d7e2f8")
+    .attr("font-size", "0.78rem")
     .text("Number of fines");
 }

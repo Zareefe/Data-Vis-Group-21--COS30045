@@ -2,13 +2,18 @@
 
 const tooltip = createTooltip();
 
-function createSVG(containerSelector, width = 900, height = 320) {
-  const margin = { top: 30, right: 24, bottom: 50, left: 80 };
+function createSVG(containerSelector, height = 260) {
+  const container = d3.select(containerSelector);
+  const node = container.node();
+
+  // Get the actual pixel width of the container
+  const width = node ? node.getBoundingClientRect().width : 600;
+
+  const margin = { top: 26, right: 22, bottom: 46, left: 70 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  const svg = d3
-    .select(containerSelector)
+  const svg = container
     .append("svg")
     .attr("width", width)
     .attr("height", height);
@@ -31,7 +36,7 @@ function createTooltip() {
 
 function formatNumber(value) {
   if (value == null || isNaN(value)) return "0";
-  if (value >= 1000000) return d3.format(".2s")(value);
-  if (value >= 1000) return d3.format(",")(value);
+  if (value >= 1_000_000) return d3.format(".2s")(value); // 1.2M
+  if (value >= 1_000) return d3.format(",")(value);
   return value.toString();
 }
