@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Mobile Phone Use – Road Safety Enforcement, 2024</title>
+  <title>Mobile Phone Use – Road Safety Enforcement Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/visual.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -10,155 +10,123 @@
 
 <body>
   <header class="site-header">
-    <div class="site-header__brand">
-      <div class="gov-brand__small">AUSTRALIAN TRANSPORT STATISTICS</div>
-      <div class="gov-brand__context">Mobile phone use – detailed view</div>
+    <div class="site-header__top">
+      <div class="site-header__brand">
+        <div class="brand-line-1">AUSTRALIAN TRANSPORT STATISTICS</div>
+        <div class="brand-line-2">Mobile phone use – detailed view</div>
+      </div>
     </div>
-    <div class="site-header__title">
-      <h1>Mobile Phone Use – Road Safety Enforcement, 2024</h1>
-    </div>
+    <nav class="topnav">
+      <a href="index.html" class="topnav__link topnav__link--active">Overview</a>
+      <a href="jurisdiction.html" class="topnav__link">Jurisdiction</a>
+      <a href="trend.html" class="topnav__link">Trend</a>
+    </nav>
   </header>
 
-  <main class="dashboard">
-    <!-- Sidebar summary -->
-    <aside class="sidebar">
-      <section class="summary-card">
-        <h2>2024 overview (current filters)</h2>
-        <div class="summary-row">
-          <span class="summary-label">Total fines</span>
-          <span id="summaryTotalFines" class="summary-value">–</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Police-issued fines</span>
-          <span id="summaryPoliceFines" class="summary-value">–</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Camera fines</span>
-          <span id="summaryCameraFines" class="summary-value">–</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Arrests</span>
-          <span id="summaryArrests" class="summary-value">–</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Charges</span>
-          <span id="summaryCharges" class="summary-value">–</span>
-        </div>
-      </section>
+  <main id="overview-page" class="page page--overview">
+    <section class="page-inner dashboard-grid">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <section class="card summary-card">
+          <h2 class="card-title">2024 overview (current filters)</h2>
+          <div class="summary-row">
+            <span class="summary-label">Total fines</span>
+            <span id="ovTotalFines" class="summary-value">–</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Police-issued fines</span>
+            <span id="ovPoliceFines" class="summary-value">–</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Camera fines</span>
+            <span id="ovCameraFines" class="summary-value">–</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Arrests</span>
+            <span id="ovArrests" class="summary-value">–</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Charges</span>
+            <span id="ovCharges" class="summary-value">–</span>
+          </div>
+        </section>
 
-      <section class="notes-card">
-        <h3>Notes</h3>
-        <p>
-          This dashboard focuses only on <strong>mobile_phone_use</strong> offences from the BITRE
-          police enforcement dataset. Use the filters and research questions to explore how fines
-          vary by jurisdiction, detection method and age group.
-        </p>
-      </section>
-    </aside>
-
-    <!-- Main column -->
-    <section class="main-column">
-      <!-- Filters -->
-      <section class="filters-bar">
-        <div class="filter-block">
-          <label for="stateFilter">Jurisdiction</label>
-          <select id="stateFilter">
-            <option value="All">All</option>
-          </select>
-        </div>
-
-        <div class="filter-block">
-          <label for="methodFilter">Detection method</label>
-          <select id="methodFilter">
-            <option value="All">All</option>
-          </select>
-        </div>
-
-        <div class="filter-block">
-          <label for="ageFilter">Age group</label>
-          <select id="ageFilter">
-            <option value="All">All</option>
-          </select>
-        </div>
-
-        <div class="filter-block filter-block--reset">
-          <button id="resetFiltersBtn" type="button">Reset view</button>
-        </div>
-      </section>
-
-      <!-- Storyboard for the 5 research questions -->
-      <section class="storyboard">
-        <h2 class="storyboard__title">Research Questions &amp; Analysis Storyboard</h2>
-        <div class="storyboard__cards">
-          <button class="story-card story-card--active" data-question="q1">
-            <div class="story-card__header">Q1: Highest offences</div>
-            <div class="story-card__chart-type">[Bar chart]</div>
-            <p class="story-card__body">
-              Which jurisdiction has the highest mobile phone offences per 10,000 licences?
-            </p>
-          </button>
-
-          <button class="story-card" data-question="q2">
-            <div class="story-card__header">Q2: Trend changes</div>
-            <div class="story-card__chart-type">[Line chart]</div>
-            <p class="story-card__body">
-              How have offence rates changed over time (including COVID years)?
-            </p>
-          </button>
-
-          <button class="story-card" data-question="q3">
-            <div class="story-card__header">Q3: COVID effect</div>
-            <div class="story-card__chart-type">[Area chart]</div>
-            <p class="story-card__body">
-              What was the impact of COVID-19 (2020–2021) on enforcement activity?
-            </p>
-          </button>
-
-          <button class="story-card" data-question="q4">
-            <div class="story-card__header">Q4: Detection method</div>
-            <div class="story-card__chart-type">[Stacked bar]</div>
-            <p class="story-card__body">
-              How do camera vs on-road police detection patterns differ between jurisdictions?
-            </p>
-          </button>
-
-          <button class="story-card" data-question="q5">
-            <div class="story-card__header">Q5: Improvement</div>
-            <div class="story-card__chart-type">[Heatmap]</div>
-            <p class="story-card__body">
-              Which jurisdictions show consistent improvement (reductions) over the years?
-            </p>
-          </button>
-        </div>
-      </section>
-
-      <!-- Charts area (responsive, no horizontal scroll) -->
-      <section class="charts-grid">
-        <article class="chart-card">
-          <h2>Fines by age group</h2>
-          <p class="chart-description">
-            Total mobile phone fines by age group, filtered by jurisdiction and detection method.
+        <section class="card notes-card">
+          <h3 class="card-title">Notes</h3>
+          <p>
+            This overview focuses on <strong>mobile_phone_use</strong> offences in the BITRE
+            police enforcement dataset. Use the filters to explore differences by jurisdiction,
+            detection method and age group.
           </p>
-          <div id="chart_age" class="chart-container"></div>
-        </article>
+        </section>
+      </aside>
 
-        <article class="chart-card">
-          <h2>Fines by jurisdiction</h2>
-          <p class="chart-description">
-            Comparison of mobile phone fines across states and territories, filtered by age group
-            and detection method.
-          </p>
-          <div id="chart_state" class="chart-container"></div>
-        </article>
+      <!-- Main content -->
+      <section class="main-column">
+        <!-- Filters -->
+        <section class="card filters-bar">
+          <div class="filter-block">
+            <label for="ovYearFilter">Year</label>
+            <select id="ovYearFilter">
+              <option value="All">All years</option>
+            </select>
+          </div>
 
-        <article class="chart-card chart-card--full">
-          <h2>Monthly trend of mobile phone fines (2024)</h2>
-          <p class="chart-description">
-            Month-by-month fines across Australia. Filters apply to all charts to support linked
-            exploration.
-          </p>
-          <div id="chart_month" class="chart-container chart-container--tall"></div>
-        </article>
+          <div class="filter-block">
+            <label for="ovStateFilter">Jurisdiction</label>
+            <select id="ovStateFilter">
+              <option value="All">All</option>
+            </select>
+          </div>
+
+          <div class="filter-block">
+            <label for="ovMethodFilter">Detection method</label>
+            <select id="ovMethodFilter">
+              <option value="All">All</option>
+            </select>
+          </div>
+
+          <div class="filter-block">
+            <label for="ovAgeFilter">Age group</label>
+            <select id="ovAgeFilter">
+              <option value="All">All</option>
+            </select>
+          </div>
+
+          <div class="filter-block filter-block--reset">
+            <button id="ovResetBtn" type="button">Reset filters</button>
+          </div>
+        </section>
+
+        <!-- Charts -->
+        <section class="charts-grid">
+          <article class="card chart-card">
+            <h2 class="card-title">Fines by age group</h2>
+            <p class="chart-description">
+              Total mobile phone fines by age group, filtered by year, jurisdiction and detection
+              method.
+            </p>
+            <div id="ovAgeChart" class="chart-container"></div>
+          </article>
+
+          <article class="card chart-card">
+            <h2 class="card-title">Fines by jurisdiction</h2>
+            <p class="chart-description">
+              Comparison of mobile phone fines across jurisdictions, filtered by year, age group
+              and detection method.
+            </p>
+            <div id="ovJurisdictionChart" class="chart-container"></div>
+          </article>
+
+          <article class="card chart-card chart-card--full">
+            <h2 class="card-title">Monthly trend of mobile phone fines</h2>
+            <p class="chart-description">
+              Month-by-month fines within the selected year. Use this chart to understand
+              seasonality and enforcement patterns.
+            </p>
+            <div id="ovMonthChart" class="chart-container chart-container--tall"></div>
+          </article>
+        </section>
       </section>
     </section>
   </main>
@@ -168,9 +136,10 @@
   </footer>
 
   <script src="js/utils.js"></script>
-  <script src="js/bar_age.js"></script>
-  <script src="js/bar_state.js"></script>
-  <script src="js/line_month.js"></script>
+  <script src="js/chart_age.js"></script>
+  <script src="js/chart_jurisdiction.js"></script>
+  <script src="js/chart_month.js"></script>
+  <script src="js/chart_trend.js"></script> <!-- loaded but only used on trend page -->
   <script src="js/main.js"></script>
 </body>
 </html>
