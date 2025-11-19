@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jurisdiction Analysis – Mobile Phone Use Enforcement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/visual.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-header__top">
+      <div class="site-header__brand">
+        <div class="brand-line-1">AUSTRALIAN TRANSPORT STATISTICS</div>
+        <div class="brand-line-2">Mobile phone use – detailed view</div>
+      </div>
+    </div>
+    <nav class="topnav">
+      <a href="index.html" class="topnav__link">Overview</a>
+      <a href="jurisdiction.html" class="topnav__link topnav__link--active">Jurisdiction</a>
+      <a href="trend.html" class="topnav__link">Trend</a>
+    </nav>
+  </header>
+
+  <main id="jurisdiction-page" class="page page--jurisdiction">
+    <section class="page-inner single-column">
+      <section class="card">
+        <h1 class="section-heading">Offences by Jurisdiction</h1>
+
+        <!-- Filters -->
+        <div class="filters-bar filters-bar--inline">
+          <div class="filter-block">
+            <label for="juYearFilter">Year</label>
+            <select id="juYearFilter">
+              <option value="All">All years</option>
+            </select>
+          </div>
+
+          <div class="filter-block">
+            <label for="juMethodFilter">Detection method</label>
+            <select id="juMethodFilter">
+              <option value="All">All methods</option>
+            </select>
+          </div>
+
+          <div class="filter-block filter-block--reset">
+            <button id="juResetBtn" type="button">Reset filters</button>
+          </div>
+        </div>
+
+        <!-- Main chart -->
+        <div class="chart-block">
+          <div class="chart-block__header">
+            <h2 class="card-title">Offences per jurisdiction</h2>
+            <p class="chart-description">
+              Total mobile phone fines by jurisdiction for the selected year and detection method.
+              Use this view to identify states and territories with higher enforcement activity.
+            </p>
+          </div>
+          <div id="juJurisdictionChart" class="chart-container chart-container--wide"></div>
+
+          <div class="legend legend--states">
+            <span class="legend-label">Jurisdictions:</span>
+            <span class="legend-swatch legend-nsw">NSW</span>
+            <span class="legend-swatch legend-vic">VIC</span>
+            <span class="legend-swatch legend-qld">QLD</span>
+            <span class="legend-swatch legend-wa">WA</span>
+            <span class="legend-swatch legend-sa">SA</span>
+            <span class="legend-swatch legend-tas">TAS</span>
+            <span class="legend-swatch legend-act">ACT</span>
+            <span class="legend-swatch legend-nt">NT</span>
+          </div>
+
+          <div class="insight-panel">
+            <h3>Insight</h3>
+            <p id="juInsightText">
+              Hover over each bar to see the exact number of fines. Higher bars indicate
+              jurisdictions with more mobile phone enforcement activity for the selected filters.
+            </p>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Data source: BITRE police enforcement fines dataset (mobile phone use offences).</p>
+  </footer>
+
+  <script src="js/utils.js"></script>
+  <script src="js/chart_age.js"></script>
+  <script src="js/chart_jurisdiction.js"></script>
+  <script src="js/chart_month.js"></script>
+  <script src="js/chart_trend.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
