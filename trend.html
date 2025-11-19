@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trend Analysis – Mobile Phone Use Enforcement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/visual.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-header__top">
+      <div class="site-header__brand">
+        <div class="brand-line-1">AUSTRALIAN TRANSPORT STATISTICS</div>
+        <div class="brand-line-2">Mobile phone use – detailed view</div>
+      </div>
+    </div>
+    <nav class="topnav">
+      <a href="index.html" class="topnav__link">Overview</a>
+      <a href="jurisdiction.html" class="topnav__link">Jurisdiction</a>
+      <a href="trend.html" class="topnav__link topnav__link--active">Trend</a>
+    </nav>
+  </header>
+
+  <main id="trend-page" class="page page--trend">
+    <section class="page-inner dual-column">
+      <section class="card trend-main">
+        <h1 class="section-heading">Trends over Time</h1>
+
+        <div class="filters-bar filters-bar--inline">
+          <div class="filter-block">
+            <label for="trMethodFilter">Detection method</label>
+            <select id="trMethodFilter">
+              <option value="All">All methods</option>
+            </select>
+          </div>
+
+          <div class="filter-block">
+            <label for="trStateFilter">Focus jurisdiction</label>
+            <select id="trStateFilter">
+              <option value="All">All</option>
+            </select>
+          </div>
+
+          <div class="filter-block filter-block--reset">
+            <button id="trResetBtn" type="button">Reset filters</button>
+          </div>
+        </div>
+
+        <div class="chart-block">
+          <div class="chart-block__header">
+            <h2 class="card-title">Offences over time</h2>
+            <p class="chart-description">
+              Annual mobile phone fines from all available years. Each line represents a
+              jurisdiction. Use this view to assess long-term improvements or increases in
+              enforcement.
+            </p>
+          </div>
+          <div id="trTrendChart" class="chart-container chart-container--tall"></div>
+        </div>
+      </section>
+
+      <aside class="card trend-side">
+        <h3>Key observations</h3>
+        <ul id="trObservations" class="observations-list">
+          <li>Lines trending downward indicate jurisdictions with improving offence rates.</li>
+          <li>Hover over the chart to see exact values for each year and jurisdiction.</li>
+          <li>Use the focus dropdown to highlight a specific jurisdiction.</li>
+        </ul>
+
+        <h3>Analysis notes</h3>
+        <p id="trAnalysis">
+          This trend analysis helps identify which jurisdictions demonstrate consistent improvement
+          (reductions in fines) over time and which show increasing enforcement activity. In your
+          report, you can quantify improvement using year-over-year percentage change and discuss
+          possible reasons for these trends.
+        </p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Data source: BITRE police enforcement fines dataset (mobile phone use offences).</p>
+  </footer>
+
+  <script src="js/utils.js"></script>
+  <script src="js/chart_age.js"></script>
+  <script src="js/chart_jurisdiction.js"></script>
+  <script src="js/chart_month.js"></script>
+  <script src="js/chart_trend.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

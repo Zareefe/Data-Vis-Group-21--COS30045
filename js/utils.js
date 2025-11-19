@@ -1,12 +1,10 @@
-// Shared helpers and tooltip setup
+// Shared helpers: responsive SVG, tooltip, number formatting
 
 const tooltip = createTooltip();
 
 function createSVG(containerSelector, height = 260) {
   const container = d3.select(containerSelector);
   const node = container.node();
-
-  // Get the actual pixel width of the container
   const width = node ? node.getBoundingClientRect().width : 600;
 
   const margin = { top: 26, right: 22, bottom: 46, left: 70 };
@@ -26,12 +24,10 @@ function createSVG(containerSelector, height = 260) {
 }
 
 function createTooltip() {
-  const div = d3
+  return d3
     .select("body")
     .append("div")
     .attr("class", "chart-tooltip");
-
-  return div;
 }
 
 function formatNumber(value) {

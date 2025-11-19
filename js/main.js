@@ -1,15 +1,11 @@
-// Main controller for dashboard
+// Shared data + page controllers
+
+const DATA_PATH = "data/police_enforcement_2024_fines.csv";
 
 let allMobileData = [];
-let currentFilters = {
-  state: "All",
-  method: "All",
-  age: "All"
-};
-let activeQuestion = "q1"; // storyboard state
 
-// Load data from CSV (ensure filename matches your /data folder)
-d3.csv("data/police_enforcement_2024_fines.csv", (d) => ({
+// Load data then initialise whichever page is active
+d3.csv(DATA_PATH, (d) => ({
   year: +d.YEAR,
   start_date: d.START_DATE,
   end_date: d.END_DATE,
@@ -21,111 +17,126 @@ d3.csv("data/police_enforcement_2024_fines.csv", (d) => ({
   fines: +d.FINES,
   arrests: +d.ARRESTS,
   charges: +d.CHARGES
-})).then((data) => {
-  // Filter to mobile phone use only
-  allMobileData = data.filter((row) => row.metric === "mobile_phone_use");
+})).then((rows) => {
+  allMobileData = rows.filter((r) => r.metric === "mobile_phone_use");
 
-  initialiseFilters(allMobileData);
-  initialiseStoryboard();
-  renderDashboard();
+  if (document.getElementById("overview-page")) {
+    initOverviewPage();
+  }
+  if (document.getElementById("jurisdiction-page")) {
+    initJurisdictionPage();
+  }
+  if (document.getElementById("trend-page")) {
+    initTrendPage();
+  }
 });
 
-// Initialise filter dropdowns from data
-function initialiseFilters(data) {
-  const stateSelect = document.getElementById("stateFilter");
-  const methodSelect = document.getElementById("methodFilter");
-  const ageSelect = document.getElementById("ageFilter");
+// ----- Helper: build option list from data -----
 
-  // Jurisdictions
-  const states = Array.from(new Set(data.map((d) => d.state))).sort();
+function uniqueSorted(array) {
+  return Array.from(new Set(array)).filter((v) => v != null && v !== "").sort();
+}
+
+// ----- OVERVIEW PAGE -----
+
+function initOverviewPage() {
+  const yearSel = document.getElementById("ovYearFilter");
+  const stateSel = document.getElementById("ovStateFilter");
+  const methodSel = document.getElementById("ovMethodFilter");
+  const ageSel = document.getElementById("ovAgeFilter");
+  const resetBtn = document.getElementById("ovResetBtn");
+
+  const years = uniqueSorted(allMobileData.map((d) => d.year));
+  years.forEach((y) => {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = y;
+    yearSel.appendChild(opt);
+  });
+
+  const states = uniqueSorted(allMobileData.map((d) => d.state));
   states.forEach((s) => {
     const opt = document.createElement("option");
     opt.value = s;
     opt.textContent = s;
-    stateSelect.appendChild(opt);
+    stateSel.appendChild(opt);
   });
 
-  // Detection methods
-  const methods = Array.from(new Set(data.map((d) => d.method))).sort();
+  const methods = uniqueSorted(allMobileData.map((d) => d.method));
   methods.forEach((m) => {
     const opt = document.createElement("option");
     opt.value = m;
     opt.textContent = m;
-    methodSelect.appendChild(opt);
+    methodSel.appendChild(opt);
   });
 
-  // Age groups
-  const ages = Array.from(new Set(data.map((d) => d.age_group))).sort();
+  const ages = uniqueSorted(allMobileData.map((d) => d.age_group));
   ages.forEach((a) => {
     const opt = document.createElement("option");
     opt.value = a;
     opt.textContent = a;
-    ageSelect.appendChild(opt);
+    ageSel.appendChild(opt);
   });
 
-  stateSelect.addEventListener("change", (e) => {
-    currentFilters.state = e.target.value;
-    renderDashboard();
+  const filters = {
+    year: "All",
+    state: "All",
+    method: "All",
+    age: "All"
+  };
+
+  yearSel.addEventListener("change", (e) => {
+    filters.year = e.target.value;
+    renderOverview(filters);
+  });
+  stateSel.addEventListener("change", (e) => {
+    filters.state = e.target.value;
+    renderOverview(filters);
+  });
+  methodSel.addEventListener("change", (e) => {
+    filters.method = e.target.value;
+    renderOverview(filters);
+  });
+  ageSel.addEventListener("change", (e) => {
+    filters.age = e.target.value;
+    renderOverview(filters);
+  });
+  resetBtn.addEventListener("click", () => {
+    filters.year = "All";
+    filters.state = "All";
+    filters.method = "All";
+    filters.age = "All";
+    yearSel.value = "All";
+    stateSel.value = "All";
+    methodSel.value = "All";
+    ageSel.value = "All";
+    renderOverview(filters);
   });
 
-  methodSelect.addEventListener("change", (e) => {
-    currentFilters.method = e.target.value;
-    renderDashboard();
-  });
-
-  ageSelect.addEventListener("change", (e) => {
-    currentFilters.age = e.target.value;
-    renderDashboard();
-  });
-
-  document.getElementById("resetFiltersBtn").addEventListener("click", () => {
-    currentFilters = { state: "All", method: "All", age: "All" };
-    stateSelect.value = "All";
-    methodSelect.value = "All";
-    ageSelect.value = "All";
-    renderDashboard();
-  });
+  renderOverview(filters);
 }
 
-// Storyboard cards (for now they just highlight; later you can change charts per Q)
-function initialiseStoryboard() {
-  const cards = document.querySelectorAll(".story-card");
+function applyFilters(data, filters) {
+  let result = data;
 
-  cards.forEach((card) => {
-    card.addEventListener("click", () => {
-      activeQuestion = card.dataset.question;
+  if (filters.year && filters.year !== "All") {
+    const yearNum = +filters.year;
+    result = result.filter((d) => d.year === yearNum);
+  }
+  if (filters.state && filters.state !== "All") {
+    result = result.filter((d) => d.state === filters.state);
+  }
+  if (filters.method && filters.method !== "All") {
+    result = result.filter((d) => d.method === filters.method);
+  }
+  if (filters.age && filters.age !== "All") {
+    result = result.filter((d) => d.age_group === filters.age);
+  }
 
-      cards.forEach((c) => c.classList.remove("story-card--active"));
-      card.classList.add("story-card--active");
-
-      // In future you can switch chart focus based on activeQuestion here.
-      // For now, charts remain the same but the storyboard communicates the story.
-      // Example: you might scroll to a specific chart for each question.
-    });
-  });
+  return result;
 }
 
-// Apply filters to data
-function getFilteredData() {
-  let filtered = allMobileData;
-
-  if (currentFilters.state !== "All") {
-    filtered = filtered.filter((d) => d.state === currentFilters.state);
-  }
-
-  if (currentFilters.method !== "All") {
-    filtered = filtered.filter((d) => d.method === currentFilters.method);
-  }
-
-  if (currentFilters.age !== "All") {
-    filtered = filtered.filter((d) => d.age_group === currentFilters.age);
-  }
-
-  return filtered;
-}
-
-// Update summary numbers
-function updateSummaryCards(data) {
+function updateOverviewSummary(data) {
   const totalFines = d3.sum(data, (d) => d.fines);
   const policeFines = d3.sum(
     data.filter(
@@ -142,23 +153,166 @@ function updateSummaryCards(data) {
   const arrests = d3.sum(data, (d) => d.arrests);
   const charges = d3.sum(data, (d) => d.charges);
 
-  document.getElementById("summaryTotalFines").textContent =
+  document.getElementById("ovTotalFines").textContent =
     formatNumber(totalFines);
-  document.getElementById("summaryPoliceFines").textContent =
+  document.getElementById("ovPoliceFines").textContent =
     formatNumber(policeFines);
-  document.getElementById("summaryCameraFines").textContent =
+  document.getElementById("ovCameraFines").textContent =
     formatNumber(cameraFines);
-  document.getElementById("summaryArrests").textContent =
-    formatNumber(arrests);
-  document.getElementById("summaryCharges").textContent =
-    formatNumber(charges);
+  document.getElementById("ovArrests").textContent = formatNumber(arrests);
+  document.getElementById("ovCharges").textContent = formatNumber(charges);
 }
 
-// Draw all charts
-function renderDashboard() {
-  const filteredData = getFilteredData();
-  updateSummaryCards(filteredData);
-  drawAgeChart(filteredData);
-  drawStateChart(filteredData);
-  drawMonthlyChart(filteredData);
+function renderOverview(filters) {
+  const filtered = applyFilters(allMobileData, filters);
+
+  updateOverviewSummary(filtered);
+  drawAgeChart(filtered, "#ovAgeChart");
+  drawJurisdictionChart(filtered, "#ovJurisdictionChart");
+
+  // For monthly chart we prefer a single year if possible
+  let yearLabel = "selected year";
+  let monthData = filtered;
+  if (filters.year !== "All") {
+    yearLabel = filters.year;
+  } else if (filtered.length > 0) {
+    const mostRecentYear = d3.max(filtered, (d) => d.year);
+    monthData = filtered.filter((d) => d.year === mostRecentYear);
+    yearLabel = mostRecentYear;
+  }
+  drawMonthlyChart(monthData, "#ovMonthChart", yearLabel);
+}
+
+// ----- JURISDICTION PAGE -----
+
+function initJurisdictionPage() {
+  const yearSel = document.getElementById("juYearFilter");
+  const methodSel = document.getElementById("juMethodFilter");
+  const resetBtn = document.getElementById("juResetBtn");
+
+  const years = uniqueSorted(allMobileData.map((d) => d.year));
+  years.forEach((y) => {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = y;
+    yearSel.appendChild(opt);
+  });
+
+  const methods = uniqueSorted(allMobileData.map((d) => d.method));
+  methods.forEach((m) => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    methodSel.appendChild(opt);
+  });
+
+  const filters = {
+    year: "All",
+    method: "All"
+  };
+
+  yearSel.addEventListener("change", (e) => {
+    filters.year = e.target.value;
+    renderJurisdiction(filters);
+  });
+
+  methodSel.addEventListener("change", (e) => {
+    filters.method = e.target.value;
+    renderJurisdiction(filters);
+  });
+
+  resetBtn.addEventListener("click", () => {
+    filters.year = "All";
+    filters.method = "All";
+    yearSel.value = "All";
+    methodSel.value = "All";
+    renderJurisdiction(filters);
+  });
+
+  renderJurisdiction(filters);
+}
+
+function renderJurisdiction(filters) {
+  const filtered = applyFilters(allMobileData, {
+    year: filters.year,
+    state: "All",
+    method: filters.method,
+    age: "All"
+  });
+
+  drawJurisdictionChart(filtered, "#juJurisdictionChart");
+
+  const total = d3.sum(filtered, (d) => d.fines);
+  const yearText =
+    filters.year === "All" ? "all available years" : `the year ${filters.year}`;
+  const methodText =
+    filters.method === "All" ? "all detection methods" : filters.method;
+
+  const insight = document.getElementById("juInsightText");
+  insight.textContent =
+    `This view shows total mobile phone fines by jurisdiction for ${yearText} ` +
+    `using ${methodText}. Overall, there are ${formatNumber(
+      total
+    )} fines in the filtered dataset. Jurisdictions with taller bars ` +
+    `contribute more fines under these conditions.`;
+}
+
+// ----- TREND PAGE -----
+
+function initTrendPage() {
+  const methodSel = document.getElementById("trMethodFilter");
+  const stateSel = document.getElementById("trStateFilter");
+  const resetBtn = document.getElementById("trResetBtn");
+
+  const methods = uniqueSorted(allMobileData.map((d) => d.method));
+  methods.forEach((m) => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    methodSel.appendChild(opt);
+  });
+
+  const states = uniqueSorted(allMobileData.map((d) => d.state));
+  states.forEach((s) => {
+    const opt = document.createElement("option");
+    opt.value = s;
+    opt.textContent = s;
+    stateSel.appendChild(opt);
+  });
+
+  const filters = {
+    method: "All",
+    state: "All"
+  };
+
+  methodSel.addEventListener("change", (e) => {
+    filters.method = e.target.value;
+    renderTrend(filters);
+  });
+
+  stateSel.addEventListener("change", (e) => {
+    filters.state = e.target.value;
+    renderTrend(filters);
+  });
+
+  resetBtn.addEventListener("click", () => {
+    filters.method = "All";
+    filters.state = "All";
+    methodSel.value = "All";
+    stateSel.value = "All";
+    renderTrend(filters);
+  });
+
+  renderTrend(filters);
+}
+
+function renderTrend(filters) {
+  const filtered = applyFilters(allMobileData, {
+    year: "All",
+    state: "All",
+    method: filters.method,
+    age: "All"
+  });
+
+  drawTrendChart(filtered, "#trTrendChart", filters.state);
 }

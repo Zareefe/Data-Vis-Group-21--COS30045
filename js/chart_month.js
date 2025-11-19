@@ -1,5 +1,5 @@
-function drawMonthlyChart(data) {
-  const container = d3.select("#chart_month");
+function drawMonthlyChart(data, containerSelector, yearForLabel) {
+  const container = d3.select(containerSelector);
   container.selectAll("*").remove();
 
   if (!data || data.length === 0) {
@@ -12,18 +12,18 @@ function drawMonthlyChart(data) {
       data,
       (v) => d3.sum(v, (d) => d.fines),
       (d) => {
+        // assumes START_DATE in format "MM/DD/YYYY" or "M/D/YYYY"
+        if (!d.start_date) return 1;
         const parts = d.start_date.split("/");
-        const month = +parts[0]; // assumes month is first; adjust if needed
+        const month = +parts[0];
         return month;
       }
     )
-    .map((d) => ({ month: d[0], total: d[1] }))
+    .map(([month, total]) => ({ month, total }))
+    .filter((d) => !Number.isNaN(d.month))
     .sort((a, b) => a.month - b.month);
 
-  const { chart, innerWidth, innerHeight } = createSVG(
-    "#chart_month",
-    300
-  );
+  const { chart, innerWidth, innerHeight } = createSVG(containerSelector, 300);
 
   const x = d3
     .scaleLinear()
@@ -36,20 +36,21 @@ function drawMonthlyChart(data) {
     .nice()
     .range([innerHeight, 0]);
 
-  const xAxis = d3
-    .axisBottom(x)
-    .ticks(12)
-    .tickFormat((d) => d3.timeFormat("%b")(new Date(2024, d - 1, 1)));
-
-  const yAxis = d3.axisLeft(y).ticks(5).tickFormat((d) => formatNumber(d));
-
   chart
     .append("g")
     .attr("class", "axis x-axis")
     .attr("transform", `translate(0,${innerHeight})`)
-    .call(xAxis);
+    .call(
+      d3
+        .axisBottom(x)
+        .ticks(12)
+        .tickFormat((d) => d3.timeFormat("%b")(new Date(2024, d - 1, 1)))
+    );
 
-  chart.append("g").attr("class", "axis y-axis").call(yAxis);
+  chart
+    .append("g")
+    .attr("class", "axis y-axis")
+    .call(d3.axisLeft(y).ticks(5).tickFormat(formatNumber));
 
   const line = d3
     .line()
@@ -61,8 +62,8 @@ function drawMonthlyChart(data) {
     .append("path")
     .datum(grouped)
     .attr("fill", "none")
-    .attr("stroke", "#69b6ff")
-    .attr("stroke-width", 3)
+    .attr("stroke", "#1f71d8")
+    .attr("stroke-width", 2.5)
     .attr("d", line);
 
   chart
@@ -75,7 +76,7 @@ function drawMonthlyChart(data) {
     .attr("cy", (d) => y(d.total))
     .attr("r", 4)
     .attr("fill", "#ffffff")
-    .attr("stroke", "#2e7cd4")
+    .attr("stroke", "#1f71d8")
     .attr("stroke-width", 2)
     .on("mousemove", (event, d) => {
       const label = d3.timeFormat("%B")(new Date(2024, d.month - 1, 1));
@@ -94,9 +95,9 @@ function drawMonthlyChart(data) {
     .attr("x", innerWidth / 2)
     .attr("y", innerHeight + 40)
     .attr("text-anchor", "middle")
-    .attr("fill", "#d7e2f8")
+    .attr("fill", "#4a5873")
     .attr("font-size", "0.78rem")
-    .text("Month (2024)");
+    .text(`Month (${yearForLabel || "selected year"})`);
 
   chart
     .append("text")
@@ -104,7 +105,7 @@ function drawMonthlyChart(data) {
     .attr("y", -58)
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "middle")
-    .attr("fill", "#d7e2f8")
+    .attr("fill", "#4a5873")
     .attr("font-size", "0.78rem")
     .text("Number of fines");
 }
