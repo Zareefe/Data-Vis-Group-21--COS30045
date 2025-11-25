@@ -1,132 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Mobile Phone Use – Road Safety Enforcement Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/visual.css" />
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-</head>
+// main.js - loads raw dataset for overview and KNIME outputs for research charts
 
-<body>
-  <header class="site-header">
-    <div class="site-header__top">
-      <div class="site-header__brand">
-        <div class="brand-line-1">AUSTRALIAN TRANSPORT STATISTICS</div>
-        <div class="brand-line-2">Mobile phone use – detailed view</div>
-      </div>
-    </div>
-    <nav class="topnav">
-      <a href="index.html" class="topnav__link topnav__link--active">Overview</a>
-      <a href="jurisdiction.html" class="topnav__link">Jurisdiction</a>
-      <a href="trend.html" class="topnav__link">Trend</a>
-    </nav>
-  </header>
+// Raw data (overview)
+const RAW_PATH = "/mnt/data/police_enforcement_2024_fines.csv";
 
-  <main id="overview-page" class="page page--overview">
-    <section class="page-inner dashboard-grid">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <section class="card summary-card">
-          <h2 class="card-title">Overview summaries (KNIME outputs)</h2>
-          <div class="summary-row">
-            <span class="summary-label">Top jurisdiction (rate per 10k)</span>
-            <span id="ovTopJur" class="summary-value">–</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Latest trend direction</span>
-            <span id="ovTrendDirection" class="summary-value">–</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">COVID impact (signal)</span>
-            <span id="ovCovidImpact" class="summary-value">–</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Most common detection method</span>
-            <span id="ovTopMethod" class="summary-value">–</span>
-          </div>
-        </section>
+// KNIME outputs (research)
+const Q1_PATH = "/mnt/data/Q1_per10000.csv";
+const Q2_PATH = "/mnt/data/Q2_trend.csv";
+const Q3_PATH = "/mnt/data/Q3_covidtrend.csv";
+const Q4_PATH = "/mnt/data/Q4_detection.csv";
+const Q5_PATH = "/mnt/data/Q5excel_Processes.csv";
 
-        <section class="card notes-card">
-          <h3 class="card-title">Notes</h3>
-          <p>
-            This site only visualises the KNIME-processed outputs for each research question.
-            Each chart uses a single KNIME result CSV (see code comments).
-          </p>
-        </section>
-      </aside>
+let rawData = [];
+let q1data = [], q2data = [], q3data = [], q4data = [], q5data = [];
 
-      <!-- Main content -->
-      <section class="main-column">
-        <!-- Filters -->
-        <section class="card filters-bar">
-          <div class="filter-block">
-            <label for="ovYearFilter">Year (overview)</label>
-            <select id="ovYearFilter"><option value="All">All</option></select>
-          </div>
+// load raw and knime data in parallel
+Promise.all([
+  d3.csv(RAW_PATH, d => ({
+    year: +d.YEAR || safeParseFloat(d.Year) || null,
+    start_date: d.START_DATE || d.Start_Date || d.start_date,
+    state: d.JURISDICTION || d.jurisdiction || d.state,
+    age_group: d.AGE_GROUP || d.Age_Group,
+    method: d.DETECTION_METHOD || d.method,
+    fines: safeParseFloat(d.FINES || d.Fines || d.fines),
+    arrests: safeParseFloat(d.ARRESTS || d.Arrests || d.arrests),
+    charges: safeParseFloat(d.CHARGES || d.Charges || d.charges)
+  })),
+  d3.csv(Q1_PATH),
+  d3.csv(Q2_PATH),
+  d3.csv(Q3_PATH),
+  d3.csv(Q4_PATH),
+  d3.csv(Q5_PATH)
+]).then(results => {
+  rawData = results[0];
+  q1data = results[1];
+  q2data = results[2];
+  q3data = results[3];
+  q4data = results[4];
+  q5data = results[5];
 
-          <div class="filter-block">
-            <label for="ovStateFilter">Jurisdiction (overview)</label>
-            <select id="ovStateFilter"><option value="All">All</option></select>
-          </div>
+  // init pages depending on DOM
+  if (document.getElementById("overview-page")) initOverviewPage();
+  if (document.getElementById("jurisdiction-page")) initJurisdictionPage();
+  if (document.getElementById("trend-page")) initTrendPage();
+}).catch(err => {
+  console.error("Data load error:", err);
+  alert("Failed to load datasets. Check file paths in main.js.");
+});
 
-          <div class="filter-block filter-block--reset">
-            <button id="ovResetBtn" type="button">Reset filters</button>
-          </div>
-        </section>
+// -------- Overview page (keeps raw charts, adds light KNIME previews) --------
+function initOverviewPage() {
+  // populate filters for raw dataset
+  const years = [...new Set(rawData.map(d=>d.year).filter(Boolean))].sort();
+  const yearSel = document.getElementById("ovYearFilter");
+  years.forEach(y => { const o=document.createElement("option"); o.value=o.textContent=y; yearSel.appendChild(o); });
 
-        <!-- Charts -->
-        <section class="charts-grid">
-          <article class="card chart-card">
-            <h2 class="card-title">Q1 — Rate per 10,000 licences (top jurisdictions)</h2>
-            <p class="chart-description">Horizontal bar chart showing rate per 10,000 licences (from Q1_per10000.csv)</p>
-            <div id="ovQ1Rate" class="chart-container"></div>
-          </article>
+  const states = [...new Set(rawData.map(d=>d.state).filter(Boolean))].sort();
+  const stateSel = document.getElementById("ovStateFilter");
+  states.forEach(s => { const o=document.createElement("option"); o.value=o.textContent=s; stateSel.appendChild(o); });
 
-          <article class="card chart-card">
-            <h2 class="card-title">Q4 — Detection methods composition (pie)</h2>
-            <p class="chart-description">Pie chart of detection method share (from Q4_detection.csv)</p>
-            <div id="ovDetectionPie" class="chart-container"></div>
-          </article>
+  const methods = [...new Set(rawData.map(d=>d.method).filter(Boolean))].sort();
+  const methodSel = document.getElementById("ovMethodFilter");
+  methods.forEach(m => { const o=document.createElement("option"); o.value=o.textContent=m; methodSel.appendChild(o); });
 
-          <article class="card chart-card chart-card--full">
-            <h2 class="card-title">Q3 — COVID period effect (area)</h2>
-            <p class="chart-description">Area chart with shaded COVID (from Q3_covidtrend.csv)</p>
-            <div id="ovCovidArea" class="chart-container chart-container--tall"></div>
-          </article>
+  const ages = [...new Set(rawData.map(d=>d.age_group).filter(Boolean))].sort();
+  const ageSel = document.getElementById("ovAgeFilter");
+  ages.forEach(a => { const o=document.createElement("option"); o.value=o.textContent=a; ageSel.appendChild(o); });
 
-          <article class="card chart-card chart-card--full">
-            <h2 class="card-title">Q5 — Improvement heatmap preview</h2>
-            <p class="chart-description">Heatmap (jurisdiction × year) preview (from Q5excel_Processes.csv)</p>
-            <div id="ovHeatmap" class="chart-container"></div>
-          </article>
+  // reset button
+  document.getElementById("ovResetBtn").addEventListener("click", () => {
+    yearSel.value="All"; stateSel.value="All"; methodSel.value="All"; ageSel.value="All";
+    renderOverview();
+  });
 
-          <article class="card chart-card chart-card--full">
-            <h2 class="card-title">Scatter: fines vs arrests (derived)</h2>
-            <p class="chart-description">Scatter to inspect correlation (aggregated from Q4_detection or Q2_trend as available)</p>
-            <div id="ovScatter" class="chart-container"></div>
-          </article>
+  // render initially
+  renderOverview();
+}
 
-        </section>
-      </section>
-    </section>
-  </main>
+function renderOverview() {
+  // no filters for briefness — use rawData directly
+  const filtered = rawData;
+  // summary
+  const total = d3.sum(filtered, d=>d.fines);
+  document.getElementById("ovTotalFines").textContent = formatNumber(total);
+  document.getElementById("ovPoliceFines").textContent = formatNumber(d3.sum(filtered.filter(d=>d.method && d.method.toLowerCase().includes("police")), d=>d.fines));
+  document.getElementById("ovCameraFines").textContent = formatNumber(d3.sum(filtered.filter(d=>d.method && d.method.toLowerCase().includes("camera")), d=>d.fines));
+  document.getElementById("ovArrests").textContent = formatNumber(d3.sum(filtered, d=>d.arrests));
+  document.getElementById("ovCharges").textContent = formatNumber(d3.sum(filtered, d=>d.charges));
 
-  <footer class="site-footer">
-    <p>Data source: KNIME outputs (Q1_per10000.csv, Q2_trend.csv, Q3_covidtrend.csv, Q4_detection.csv, Q5excel_Processes.csv)</p>
-  </footer>
+  // draw raw charts
+  drawAgeChart(filtered, "#ovAgeChart");
+  drawJurisdictionChart(filtered, "#ovJurisdictionChart");
+  drawMonthlyChart(filtered, "#ovMonthChart", null);
 
-  <!-- scripts -->
-  <script src="js/utils.js"></script>
+  // draw lightweight KNIME previews (small)
+  drawQ1Preview(q1data, "#ovQ1Preview");
+  drawDetectionPiePreview(q4data, "#ovQ4Preview");
+}
 
-  <!-- charts -->
-  <script src="js/chart_q1_rate.js"></script>
-  <script src="js/chart_detection.js"></script>
-  <script src="js/chart_covid_area.js"></script>
-  <script src="js/chart_heatmap_q5.js"></script>
-  <script src="js/chart_scatter.js"></script>
+// preview helpers
+function drawQ1Preview(data, selector) {
+  // show top 3 jurisdictions by rate as a tiny bar
+  if (!data || data.length===0) { d3.select(selector).text("No KNIME Q1 data"); return; }
+  const sorted = data.map(d=>({state:d.Jurisdiction || d.state || d.jurisdiction, rate: + (d.Rate_per_10000 || d.rate || d.Rate || d.rate_per_10000 || d.RATE) || 0}))
+    .sort((a,b)=>b.rate - a.rate).slice(0,3);
+  const html = `<strong>Top rates</strong><ul style="margin:6px 0;padding-left:18px">${sorted.map(s=>`<li>${s.state}: ${formatNumber(s.rate)}</li>`).join("")}</ul>`;
+  d3.select(selector).html(html);
+}
+function drawDetectionPiePreview(data, selector) {
+  if (!data || data.length===0) { d3.select(selector).text("No Q4"); return; }
+  // aggregate by method
+  const agg = {};
+  data.forEach(d => {
+    const m = d.Method || d.method || d.Detection_Method || "Other";
+    const v = + (d.Fines || d.fines || d.Value || d.value || 0);
+    agg[m] = (agg[m]||0) + v;
+  });
+  const parts = Object.entries(agg).slice(0,3);
+  const html = `<strong>Top methods</strong><ul style="margin:6px 0;padding-left:18px">${parts.map(p=>`<li>${p[0]}: ${formatNumber(p[1])}</li>`).join("")}</ul>`;
+  d3.select(selector).html(html);
+}
 
-  <!-- loader -->
-  <script src="js/main.js"></script>
-</body>
-</html>
+// -------- Jurisdiction page (existing raw chart + KNIME Q1/Q4 below) --------
+function initJurisdictionPage() {
+  // draw existing raw chart
+  drawJurisdictionChart(rawData, "#existingJurisdiction");
+
+  // draw Q1 & Q4 below (KNIME)
+  drawQ1RateChart(q1data, "#q1RateChart");
+  drawDetectionStack(q4data, "#q4StackedChart");
+  drawPieDetection(q4data, "#q4PieChart");
+
+  // compute highlight
+  if (q1data && q1data.length) {
+    const best = q1data.reduce((a,b) => (+ (a.Rate_per_10000 || a.rate || a.Rate || 0)) > (+ (b.Rate_per_10000 || b.rate || 0)) ? a : b);
+    const state = best.Jurisdiction || best.state || best.jurisdiction;
+    const rate = +(best.Rate_per_10000 || best.rate || best.Rate || 0);
+    d3.select("#q1Top").html(`<strong>Top jurisdiction:</strong> ${state} — ${formatNumber(rate)} offences per 10,000 licences`);
+  }
+}
+
+// -------- Trend page (existing + KNIME Q2/Q3/Q5 below) --------
+function initTrendPage() {
+  // draw existing raw trend (if you have chart_trend.js existing)
+  // if you provided existingTrend container, use the existing chart file
+  if (typeof drawTrendChart === "function") {
+    drawTrendChart(rawData, "#existingTrend");
+  }
+
+  // KNIME charts
+  drawTrendKnime(q2data, "#q2TrendChart", "#q2SlopeInfo");
+  drawCovidArea(q3data, "#q3CovidChart");
+  drawHeatmapQ5(q5data, "#q5Heatmap", "#q5Highlights");
+}

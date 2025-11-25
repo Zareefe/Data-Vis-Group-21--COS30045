@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Trend & Improvement Analysis</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <title>Trends & Improvements</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/visual.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
-
 <body>
   <header class="site-header">
     <div class="site-header__top">
       <div class="site-header__brand">
         <div class="brand-line-1">AUSTRALIAN TRANSPORT STATISTICS</div>
-        <div class="brand-line-2">Trends & improvement analysis</div>
+        <div class="brand-line-2">Mobile phone use – trends & improvement</div>
       </div>
     </div>
     <nav class="topnav">
@@ -26,60 +25,54 @@
   <main id="trend-page" class="page page--trend">
     <section class="page-inner dual-column">
       <section class="card trend-main">
-        <h1 class="section-heading">Which jurisdictions demonstrate consistent downward trends?</h1>
+        <h1 class="section-heading">Trends & improvement analysis</h1>
 
-        <div class="filters-bar filters-bar--inline">
-          <div class="filter-block">
-            <label for="trMethodFilter">Method</label>
-            <select id="trMethodFilter"><option value="All">All</option></select>
-          </div>
+        <div id="existingTrend" class="chart-container chart-container--tall"></div>
 
-          <div class="filter-block">
-            <label for="trStateFilter">Focus jurisdiction</label>
-            <select id="trStateFilter"><option value="All">All</option></select>
-          </div>
+        <!-- Q2: KNIME multi-year trends -->
+        <hr class="section-sep"/>
+        <h2 class="card-title">Q2 — Multi-year trend analysis (KNIME)</h2>
+        <p class="chart-description">Clean multi-year trend lines and regression slope per jurisdiction from KNIME.</p>
+        <div id="q2TrendChart" class="chart-container chart-container--tall"></div>
+        <div id="q2SlopeInfo" class="insight-panel" style="margin-top:8px;"></div>
 
-          <div class="filter-block filter-block--reset">
-            <button id="trResetBtn">Reset</button>
-          </div>
-        </div>
+        <!-- Q3: COVID area -->
+        <hr class="section-sep"/>
+        <h2 class="card-title">Q3 — COVID-19 effect (KNIME)</h2>
+        <p class="chart-description">Area chart with shaded 2020–2021 region and pre/during/post comparisons.</p>
+        <div id="q3CovidChart" class="chart-container chart-container--tall"></div>
 
-        <div class="card chart-card">
-          <h2 class="card-title">Multi-year trend (Q2_trend.csv) — multi-line chart</h2>
-          <div id="trTrendChart" class="chart-container chart-container--tall"></div>
-        </div>
+        <!-- Q5: Heatmap -->
+        <hr class="section-sep"/>
+        <h2 class="card-title">Q5 — Improvement heatmap (KNIME)</h2>
+        <p class="chart-description">Heatmap showing change by jurisdiction and year; improvement score and highlights.</p>
+        <div id="q5Heatmap" class="chart-container chart-container--wide"></div>
+        <div id="q5Highlights" class="insight-panel" style="margin-top:8px;"></div>
 
-        <div class="card chart-card">
-          <h2 class="card-title">COVID effect (Q3_covidtrend.csv) — area chart</h2>
-          <div id="trCovidChart" class="chart-container chart-container--wide"></div>
-        </div>
-
-        <div class="card chart-card">
-          <h2 class="card-title">Improvement heatmap (Q5excel_Processes.csv)</h2>
-          <div id="trHeatmap" class="chart-container chart-container--wide"></div>
-        </div>
       </section>
 
       <aside class="card trend-side">
         <h3>Key observations</h3>
-        <ul id="trObservations">
-          <li id="obs1">Trend summary will appear here once filters applied.</li>
+        <ul id="trObservations" class="observations-list">
+          <li>Lines trending downward indicate improving jurisdictions.</li>
+          <li>Heatmap shows year-by-year intensity — look for consistent color decline.</li>
+          <li>Use filters to highlight states or detection methods.</li>
         </ul>
-
-        <h3>Statistical notes</h3>
-        <p id="trStats">We compute slope and simple YOY % changes from KNIME outputs where available.</p>
+        <h3>Analysis notes</h3>
+        <p id="trAnalysis">We use KNIME processed outputs for each research question. These are the definitive datasets for the analysis sections above.</p>
       </aside>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Data source: Q2_trend.csv, Q3_covidtrend.csv, Q5excel_Processes.csv (KNIME outputs).</p>
+    <p>Data source: KNIME processed outputs.</p>
   </footer>
 
   <script src="js/utils.js"></script>
-  <script src="js/chart_trend.js"></script>
+  <script src="js/chart_trend_knime.js"></script>
   <script src="js/chart_covid_area.js"></script>
   <script src="js/chart_heatmap_q5.js"></script>
+  <script src="js/chart_scatter.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

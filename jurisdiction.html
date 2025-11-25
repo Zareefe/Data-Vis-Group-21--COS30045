@@ -1,77 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Jurisdiction Analysis</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <title>Mobile Phone Use – Road Safety Enforcement Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/visual.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
-
 <body>
   <header class="site-header">
     <div class="site-header__top">
       <div class="site-header__brand">
         <div class="brand-line-1">AUSTRALIAN TRANSPORT STATISTICS</div>
-        <div class="brand-line-2">Mobile phone use – jurisdiction deep dive</div>
+        <div class="brand-line-2">Mobile phone use – detailed view</div>
       </div>
     </div>
     <nav class="topnav">
-      <a href="index.html" class="topnav__link">Overview</a>
-      <a href="jurisdiction.html" class="topnav__link topnav__link--active">Jurisdiction</a>
+      <a href="index.html" class="topnav__link topnav__link--active">Overview</a>
+      <a href="jurisdiction.html" class="topnav__link">Jurisdiction</a>
       <a href="trend.html" class="topnav__link">Trend</a>
     </nav>
   </header>
 
-  <main id="jurisdiction-page" class="page page--jurisdiction">
-    <section class="page-inner single-column">
-      <section class="card">
-        <h1 class="section-heading">Which jurisdiction records the highest number of offences per 10,000 licences?</h1>
+  <main id="overview-page" class="page page--overview">
+    <section class="page-inner dashboard-grid">
+      <aside class="sidebar">
+        <section class="card summary-card">
+          <h2 class="card-title">Overview summary</h2>
+          <div class="summary-row"><span class="summary-label">Total fines</span><span id="ovTotalFines" class="summary-value">–</span></div>
+          <div class="summary-row"><span class="summary-label">Police-issued fines</span><span id="ovPoliceFines" class="summary-value">–</span></div>
+          <div class="summary-row"><span class="summary-label">Camera fines</span><span id="ovCameraFines" class="summary-value">–</span></div>
+          <div class="summary-row"><span class="summary-label">Arrests</span><span id="ovArrests" class="summary-value">–</span></div>
+          <div class="summary-row"><span class="summary-label">Charges</span><span id="ovCharges" class="summary-value">–</span></div>
+        </section>
 
-        <div class="filters-bar filters-bar--inline">
-          <div class="filter-block">
-            <label for="juYearFilter">Year</label>
-            <select id="juYearFilter"><option value="All">All</option></select>
-          </div>
+        <section class="card notes-card">
+          <h3 class="card-title">Notes</h3>
+          <p>This overview shows general trends from the raw BITRE dataset. The research question visualisations (KNIME outputs) are on the Jurisdiction and Trend pages.</p>
+        </section>
+      </aside>
 
-          <div class="filter-block">
-            <label for="juSortBy">Sort</label>
-            <select id="juSortBy">
-              <option value="rate">Rate per 10k</option>
-              <option value="name">Jurisdiction name</option>
-            </select>
-          </div>
+      <section class="main-column">
+        <section class="card filters-bar">
+          <div class="filter-block"><label for="ovYearFilter">Year</label><select id="ovYearFilter"><option value="All">All years</option></select></div>
+          <div class="filter-block"><label for="ovStateFilter">Jurisdiction</label><select id="ovStateFilter"><option value="All">All</option></select></div>
+          <div class="filter-block"><label for="ovMethodFilter">Detection method</label><select id="ovMethodFilter"><option value="All">All</option></select></div>
+          <div class="filter-block"><label for="ovAgeFilter">Age group</label><select id="ovAgeFilter"><option value="All">All</option></select></div>
+          <div class="filter-block filter-block--reset"><button id="ovResetBtn" type="button">Reset filters</button></div>
+        </section>
 
-          <div class="filter-block filter-block--reset">
-            <button id="juResetBtn">Reset</button>
-          </div>
-        </div>
+        <section class="charts-grid">
+          <article class="card chart-card">
+            <h2 class="card-title">Fines by age group</h2>
+            <p class="chart-description">Total mobile phone fines by age group (raw dataset).</p>
+            <div id="ovAgeChart" class="chart-container"></div>
+          </article>
 
-        <div class="card chart-card">
-          <h2 class="card-title">Rate per 10,000 licences — horizontal bar</h2>
-          <div id="juQ1Rate" class="chart-container chart-container--wide"></div>
-        </div>
+          <article class="card chart-card">
+            <h2 class="card-title">Fines by jurisdiction</h2>
+            <p class="chart-description">Comparison of mobile phone fines across jurisdictions (raw dataset).</p>
+            <div id="ovJurisdictionChart" class="chart-container"></div>
+          </article>
 
-        <div class="card chart-card">
-          <h2 class="card-title">Detection method breakdown (stacked)</h2>
-          <div id="juDetectionStack" class="chart-container chart-container--wide"></div>
-        </div>
+          <article class="card chart-card chart-card--full">
+            <h2 class="card-title">Monthly trend of mobile phone fines</h2>
+            <p class="chart-description">Month-by-month fines for the selected year (raw dataset).</p>
+            <div id="ovMonthChart" class="chart-container chart-container--tall"></div>
+          </article>
 
-        <div class="insight-panel">
-          <h3>Insight</h3>
-          <p id="juInsight">Hover any bar to inspect values and see the source KNIME file used to compute rates.</p>
-        </div>
+          <!-- KNIME small preview area (optional and lightweight) -->
+          <article class="card chart-card chart-card--full">
+            <h2 class="card-title">Research previews (KNIME)</h2>
+            <div class="knime-previews">
+              <div id="ovQ1Preview" class="knime-preview small"></div>
+              <div id="ovQ4Preview" class="knime-preview small"></div>
+            </div>
+          </article>
+
+        </section>
       </section>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Data source: Q1_per10000.csv and Q4_detection.csv (KNIME outputs).</p>
+    <p>Data source: BITRE police enforcement fines dataset and KNIME processed outputs.</p>
   </footer>
 
+  <!-- scripts -->
   <script src="js/utils.js"></script>
+
+  <!-- existing charts (raw) -->
+  <script src="js/chart_age.js"></script>
+  <script src="js/chart_jurisdiction.js"></script>
+  <script src="js/chart_month.js"></script>
+
+  <!-- knime research charts (small previews) -->
   <script src="js/chart_q1_rate.js"></script>
   <script src="js/chart_detection.js"></script>
+
+  <!-- controller -->
   <script src="js/main.js"></script>
 </body>
 </html>
