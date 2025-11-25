@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jurisdiction Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/visual.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-header__top">
+      <div class="site-header__brand">
+        <div class="brand-line-1">AUSTRALIAN TRANSPORT STATISTICS</div>
+        <div class="brand-line-2">Mobile phone use – jurisdiction deep dive</div>
+      </div>
+    </div>
+    <nav class="topnav">
+      <a href="index.html" class="topnav__link">Overview</a>
+      <a href="jurisdiction.html" class="topnav__link topnav__link--active">Jurisdiction</a>
+      <a href="trend.html" class="topnav__link">Trend</a>
+    </nav>
+  </header>
+
+  <main id="jurisdiction-page" class="page page--jurisdiction">
+    <section class="page-inner single-column">
+      <section class="card">
+        <h1 class="section-heading">Which jurisdiction records the highest number of offences per 10,000 licences?</h1>
+
+        <div class="filters-bar filters-bar--inline">
+          <div class="filter-block">
+            <label for="juYearFilter">Year</label>
+            <select id="juYearFilter"><option value="All">All</option></select>
+          </div>
+
+          <div class="filter-block">
+            <label for="juSortBy">Sort</label>
+            <select id="juSortBy">
+              <option value="rate">Rate per 10k</option>
+              <option value="name">Jurisdiction name</option>
+            </select>
+          </div>
+
+          <div class="filter-block filter-block--reset">
+            <button id="juResetBtn">Reset</button>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <h2 class="card-title">Rate per 10,000 licences — horizontal bar</h2>
+          <div id="juQ1Rate" class="chart-container chart-container--wide"></div>
+        </div>
+
+        <div class="card chart-card">
+          <h2 class="card-title">Detection method breakdown (stacked)</h2>
+          <div id="juDetectionStack" class="chart-container chart-container--wide"></div>
+        </div>
+
+        <div class="insight-panel">
+          <h3>Insight</h3>
+          <p id="juInsight">Hover any bar to inspect values and see the source KNIME file used to compute rates.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Data source: Q1_per10000.csv and Q4_detection.csv (KNIME outputs).</p>
+  </footer>
+
+  <script src="js/utils.js"></script>
+  <script src="js/chart_q1_rate.js"></script>
+  <script src="js/chart_detection.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
