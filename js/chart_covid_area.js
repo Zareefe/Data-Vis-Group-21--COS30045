@@ -34,7 +34,7 @@ function drawCovidArea(rows, selector) {
   if (covidStart <= domain[1] && covidEnd >= domain[0]) {
     const left = x(Math.max(covidStart, domain[0]));
     const right = x(Math.min(covidEnd, domain[1]));
-    chart.append("rect").attr("x", left).attr("y", 0).attr("width", Math.max(0, right-left)).attr("height", innerHeight).attr("fill", "#ffd9b3").attr("opacity", 0.28);
+    chart.append("rect").attr("x", left).attr("y", 0).attr("width", Math.max(0, right-left)).attr("height", innerHeight).attr("fill", "#a11a1aff").attr("opacity", 0.28);
     chart.append("text").attr("x", left + 8).attr("y", 18).attr("fill", "#8a4b1e").text("COVID period (2020–2021)");
   }
 

@@ -31,23 +31,23 @@
           <h2 class="card-title">2024 overview (current filters)</h2>
           <div class="summary-row">
             <span class="summary-label">Total fines</span>
-            <span id="ovTotalFines" class="summary-value">–</span>
+            <span id="ovTotalFines" class="summary-value">—</span>
           </div>
           <div class="summary-row">
             <span class="summary-label">Police-issued fines</span>
-            <span id="ovPoliceFines" class="summary-value">–</span>
+            <span id="ovPoliceFines" class="summary-value">—</span>
           </div>
           <div class="summary-row">
             <span class="summary-label">Camera fines</span>
-            <span id="ovCameraFines" class="summary-value">–</span>
+            <span id="ovCameraFines" class="summary-value">—</span>
           </div>
           <div class="summary-row">
             <span class="summary-label">Arrests</span>
-            <span id="ovArrests" class="summary-value">–</span>
+            <span id="ovArrests" class="summary-value">—</span>
           </div>
           <div class="summary-row">
             <span class="summary-label">Charges</span>
-            <span id="ovCharges" class="summary-value">–</span>
+            <span id="ovCharges" class="summary-value">—</span>
           </div>
         </section>
 
@@ -128,23 +128,35 @@
           </article>
         </section>
 
-        <!-- ⭐ NEW KNIME PREVIEW SECTION -->
-        <section class="card">
-          <h2 class="card-title">Research Question Highlights (KNIME Results)</h2>
-          <p class="chart-description">Summary visualisations generated from KNIME outputs.</p>
+        <!-- 🎯 NEW KNIME PREVIEW SECTION -->
+        <section class="card knime-preview-section">
+          <h2 class="card-title">📊 Research Insights (KNIME Analysis)</h2>
+          <p class="chart-description">Key findings from advanced data analysis using KNIME workflows.</p>
 
-          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div class="knime-preview-grid">
             <!-- Q1 Preview -->
-            <div style="flex:1;min-width:320px;">
-              <h4>Q1: Rate per 10,000 licences</h4>
-              <div id="knime-q1-rate" class="chart-container" style="height:260px;"></div>
-            </div>
+            <article class="knime-preview-card">
+              <div class="knime-card-header">
+                <h4 class="knime-card-title">Q1: Offence Rate by State</h4>
+                <span class="knime-badge">Per 10k licences</span>
+              </div>
+              <p class="knime-card-desc">Interactive view of mobile phone offence rates across jurisdictions. Select a year to see specific data or view the average across all years (2010-2014).</p>
+              <div id="knime-q1-rate" class="chart-container knime-chart-preview"></div>
+            </article>
 
             <!-- Q4 Preview -->
-            <div style="flex:1;min-width:320px;">
-              <h4>Q4: Detection Method Distribution</h4>
-              <div id="knime-q4-pie" class="chart-container" style="height:260px;"></div>
-            </div>
+            <article class="knime-preview-card">
+              <div class="knime-card-header">
+                <h4 class="knime-card-title">Q4: Detection Methods</h4>
+                <span class="knime-badge">Distribution</span>
+              </div>
+              <p class="knime-card-desc">How mobile phone offences are detected across different enforcement methods</p>
+              <div id="knime-q4-pie" class="chart-container knime-chart-preview"></div>
+            </article>
+          </div>
+
+          <div class="knime-cta">
+            <p>🔍 <strong>Want to explore more?</strong> Visit the dedicated KNIME analysis pages for detailed insights on trends, COVID impact, and detection patterns.</p>
           </div>
         </section>
 
@@ -164,32 +176,18 @@
   <script src="js/chart_trend.js"></script>
   <script src="js/main.js"></script>
 
-  <!-- ⭐ NEW KNIME SCRIPTS -->
+  <!-- NEW KNIME UTILS - must be loaded FIRST -->
+  <script src="js/utils_knime.js"></script>
+
+  <!-- KNIME charts -->
   <script src="js/chart_q1_rate.js"></script>
   <script src="js/chart_detection.js"></script>
+  <script src="js/chart_trend_knime.js"></script>
+  <script src="js/chart_covid_area.js"></script>
+  <script src="js/chart_heatmap_q5.js"></script>
   <script src="js/chart_scatter_knime.js"></script>
+
+  <!-- KNIME MAIN (last!) -->
   <script src="js/main_knime.js"></script>
 </body>
 </html>
-
-<script src="js/utils.js"></script>
-<script src="js/chart_age.js"></script>
-<script src="js/chart_jurisdiction.js"></script>
-<script src="js/chart_month.js"></script>
-<script src="js/chart_trend.js"></script>
-<script src="js/main.js"></script>
-
-<!-- NEW KNIME UTILS - must be loaded FIRST -->
-<script src="js/utils_knime.js"></script>
-
-<!-- KNIME charts -->
-<script src="js/chart_q1_rate.js"></script>
-<script src="js/chart_detection.js"></script>
-<script src="js/chart_trend_knime.js"></script>
-<script src="js/chart_covid_area.js"></script>
-<script src="js/chart_heatmap_q5.js"></script>
-<script src="js/chart_scatter_knime.js"></script>
-
-<!-- KNIME MAIN (last!) -->
-<script src="js/main_knime.js"></script>
-

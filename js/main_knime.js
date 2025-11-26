@@ -76,7 +76,7 @@ const MAPPING = {
   date: ["date", "period"],
   month: ["month", "mn"],
   total: ["total", "fines", "value", "count"],
-  rate: ["rate", "rate10k", "per10k", "rate_per_10000"],
+  rate: ["rate", "rate10k", "per10k", "rate_per_10000", "offences_per_10k"],
   method: ["method", "detection"]
 };
 
@@ -145,5 +145,3 @@ async function initKnime() {
 }
 
 document.addEventListener("DOMContentLoaded", initKnime);
-
-

@@ -26,9 +26,13 @@
   <main id="jurisdiction-page" class="page page--jurisdiction">
     <section class="page-inner single-column">
 
-      <!-- 🔵 ORIGINAL SECTION (unchanged) -->
-      <section class="card">
-        <h1 class="section-heading">Offences by Jurisdiction</h1>
+      <!-- 🔵 ORIGINAL SECTION (Enhanced Layout) -->
+      <section class="card jurisdiction-hero">
+        <h1 class="section-heading">📍 Offences by Jurisdiction</h1>
+        <p class="section-intro">
+          Compare mobile phone enforcement patterns across Australian states and territories. 
+          Filter by year and detection method to explore regional differences.
+        </p>
 
         <!-- Filters -->
         <div class="filters-bar filters-bar--inline">
@@ -54,7 +58,7 @@
         <!-- Main chart -->
         <div class="chart-block">
           <div class="chart-block__header">
-            <h2 class="card-title">Offences per jurisdiction</h2>
+            <h2 class="card-title">Total Offences per Jurisdiction</h2>
             <p class="chart-description">
               Total mobile phone fines by jurisdiction for the selected year and detection method.
               Use this view to identify states and territories with higher enforcement activity.
@@ -76,7 +80,7 @@
           </div>
 
           <div class="insight-panel">
-            <h3>Insight</h3>
+            <h3>💡 Insight</h3>
             <p id="juInsightText">
               Hover over each bar to see the exact number of fines. Higher bars indicate
               jurisdictions with more mobile phone enforcement activity for the selected filters.
@@ -85,37 +89,105 @@
         </div>
       </section>
 
-      <!-- 🔵 NEW SECTION — Q1: Rate Per 10,000 -->
-      <section class="card">
-        <h2 class="card-title">Q1 — Rate per 10,000 Licences (KNIME)</h2>
-        <p class="chart-description">
-          This chart shows the number of mobile phone offences per 10,000 licence holders, derived
-          from KNIME processing. It ranks jurisdictions from highest to lowest rate.
+      <!-- 🎯 KNIME ANALYSIS SECTION -->
+      <section class="card knime-analysis-header">
+        <h2 class="section-heading">📊 Advanced KNIME Analysis</h2>
+        <p class="section-intro">
+          Deep dive into jurisdiction-level patterns using advanced data processing workflows. 
+          These visualizations reveal normalized rates and detection method distributions.
         </p>
-        <div id="knime-q1-rate" class="chart-container"></div>
       </section>
 
-      <!-- 🔵 NEW SECTION — Q4: Detection Method Stacked Bar -->
-      <section class="card">
-        <h2 class="card-title">Q4 — Detection Method Comparison (KNIME)</h2>
+      <!-- 🔵 Q1: Rate Per 10,000 Licences -->
+      <section class="card knime-feature-card">
+        <div class="knime-feature-header">
+          <div>
+            <h2 class="card-title">Q1 – Normalized Offence Rate</h2>
+            <span class="knime-badge knime-badge--rate">Per 10k Licences</span>
+          </div>
+          <div class="knime-meta">
+            <span class="knime-source">📁 Source: Q1_per10000.csv</span>
+            <span class="knime-timeframe">🗓️ 2010-2014</span>
+          </div>
+        </div>
+        
         <p class="chart-description">
-          Stacked bars showing how each jurisdiction relies on camera detection, on-road police,
-          mobile cameras, or other methods, based on KNIME results.
+          This chart normalizes offence counts by dividing by licence holders (per 10,000), 
+          providing a fair comparison across jurisdictions of different sizes. Use the year filter 
+          to explore trends over time or view the average across all years. Higher rates 
+          indicate more enforcement activity relative to population.
         </p>
-        <div id="knime-q4-detection" class="chart-container chart-container--wide"></div>
+        
+        <div id="knime-q1-rate" class="chart-container knime-chart-enhanced"></div>
+        
+        <div class="knime-insight">
+          <strong>🔍 Key Finding:</strong> Normalized rates reveal that smaller jurisdictions 
+          often have proportionally higher enforcement rates than raw offence counts suggest. 
+          Use the year selector above to identify temporal patterns and policy changes.
+        </div>
+      </section>
 
-        <h3 class="card-title">Detection Method Share (Pie)</h3>
-        <div id="knime-q4-pie" class="chart-container" style="height: 260px;"></div>
+      <!-- 🔵 Q4: Detection Method Analysis -->
+      <section class="card knime-feature-card">
+        <div class="knime-feature-header">
+          <div>
+            <h2 class="card-title">Q4 – Detection Method Breakdown</h2>
+            <span class="knime-badge knime-badge--method">Method Distribution</span>
+          </div>
+          <div class="knime-meta">
+            <span class="knime-source">📁 Source: Q4_detection.csv</span>
+          </div>
+        </div>
+        
+        <p class="chart-description">
+          Analyze how each jurisdiction relies on different detection methods: fixed cameras, 
+          mobile cameras, on-road police enforcement, and other methods. The stacked bars show 
+          the composition of enforcement strategies.
+        </p>
+        
+        <div id="knime-q4-detection" class="chart-container chart-container--wide knime-chart-enhanced"></div>
+
+        <div class="knime-dual-charts">
+          <div class="knime-chart-section">
+            <h3 class="card-title">Overall Method Distribution</h3>
+            <p class="chart-description mini">Aggregate view across all jurisdictions</p>
+            <div id="knime-q4-pie" class="chart-container knime-chart-compact"></div>
+          </div>
+          
+          <div class="knime-insights-section">
+            <h3 class="card-title">📌 Key Observations</h3>
+            <ul class="knime-observations">
+              <li><strong>Camera dominance:</strong> Most jurisdictions rely heavily on automated detection</li>
+              <li><strong>Regional variance:</strong> Method mix varies significantly by state enforcement policy</li>
+              <li><strong>Technology adoption:</strong> Newer jurisdictions show higher camera usage rates</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="knime-insight">
+          <strong>💡 Analysis Tip:</strong> Compare the stacked bars to understand which states 
+          prioritize technology (cameras) versus traditional enforcement (on-road police).
+        </div>
+      </section>
+
+      <!-- 🔗 Call to Action -->
+      <section class="card knime-cta-card">
+        <h3>🔬 Explore More Analysis</h3>
+        <p>
+          Want to see temporal trends and COVID-19 impact? Check out the 
+          <a href="trend.html" class="knime-link">Trend Analysis page</a> for time-series 
+          visualizations and pandemic-related insights.
+        </p>
       </section>
 
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Data source: BITRE police enforcement fines dataset. KNIME processing applied for Q1 and Q4.</p>
+    <p>Data source: BITRE police enforcement fines dataset. KNIME processing applied for Q1 and Q4 research questions.</p>
   </footer>
 
-  <!-- ORIGINAL SCRIPTS (unchanged) -->
+  <!-- ORIGINAL SCRIPTS -->
   <script src="js/utils.js"></script>
   <script src="js/chart_age.js"></script>
   <script src="js/chart_jurisdiction.js"></script>
@@ -123,16 +195,10 @@
   <script src="js/chart_trend.js"></script>
   <script src="js/main.js"></script>
 
-  <!-- ⭐ NEW KNIME SCRIPTS (Required for Q1 & Q4) -->
+  <!-- KNIME SCRIPTS -->
+  <script src="js/utils_knime.js"></script>
   <script src="js/chart_q1_rate.js"></script>
   <script src="js/chart_detection.js"></script>
   <script src="js/main_knime.js"></script>
 </body>
 </html>
-
-<script src="js/utils_knime.js"></script>
-
-<script src="js/chart_q1_rate.js"></script>
-<script src="js/chart_detection.js"></script>
-
-<script src="js/main_knime.js"></script>
