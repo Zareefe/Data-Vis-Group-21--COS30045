@@ -25,6 +25,8 @@
 
   <main id="jurisdiction-page" class="page page--jurisdiction">
     <section class="page-inner single-column">
+
+      <!-- 🔵 ORIGINAL SECTION (unchanged) -->
       <section class="card">
         <h1 class="section-heading">Offences by Jurisdiction</h1>
 
@@ -58,6 +60,7 @@
               Use this view to identify states and territories with higher enforcement activity.
             </p>
           </div>
+
           <div id="juJurisdictionChart" class="chart-container chart-container--wide"></div>
 
           <div class="legend legend--states">
@@ -81,18 +84,55 @@
           </div>
         </div>
       </section>
+
+      <!-- 🔵 NEW SECTION — Q1: Rate Per 10,000 -->
+      <section class="card">
+        <h2 class="card-title">Q1 — Rate per 10,000 Licences (KNIME)</h2>
+        <p class="chart-description">
+          This chart shows the number of mobile phone offences per 10,000 licence holders, derived
+          from KNIME processing. It ranks jurisdictions from highest to lowest rate.
+        </p>
+        <div id="knime-q1-rate" class="chart-container"></div>
+      </section>
+
+      <!-- 🔵 NEW SECTION — Q4: Detection Method Stacked Bar -->
+      <section class="card">
+        <h2 class="card-title">Q4 — Detection Method Comparison (KNIME)</h2>
+        <p class="chart-description">
+          Stacked bars showing how each jurisdiction relies on camera detection, on-road police,
+          mobile cameras, or other methods, based on KNIME results.
+        </p>
+        <div id="knime-q4-detection" class="chart-container chart-container--wide"></div>
+
+        <h3 class="card-title">Detection Method Share (Pie)</h3>
+        <div id="knime-q4-pie" class="chart-container" style="height: 260px;"></div>
+      </section>
+
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Data source: BITRE police enforcement fines dataset (mobile phone use offences).</p>
+    <p>Data source: BITRE police enforcement fines dataset. KNIME processing applied for Q1 and Q4.</p>
   </footer>
 
+  <!-- ORIGINAL SCRIPTS (unchanged) -->
   <script src="js/utils.js"></script>
   <script src="js/chart_age.js"></script>
   <script src="js/chart_jurisdiction.js"></script>
   <script src="js/chart_month.js"></script>
   <script src="js/chart_trend.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- ⭐ NEW KNIME SCRIPTS (Required for Q1 & Q4) -->
+  <script src="js/chart_q1_rate.js"></script>
+  <script src="js/chart_detection.js"></script>
+  <script src="js/main_knime.js"></script>
 </body>
 </html>
+
+<script src="js/utils_knime.js"></script>
+
+<script src="js/chart_q1_rate.js"></script>
+<script src="js/chart_detection.js"></script>
+
+<script src="js/main_knime.js"></script>

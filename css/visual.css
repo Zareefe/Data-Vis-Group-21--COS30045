@@ -421,3 +421,183 @@ svg {
     grid-template-columns: 1fr;
   }
 }
+
+/* ======================================================= */
+/* ===== KNIME CHARTS ADDITIONS (Q1, Q2, Q3, Q4, Q5) ===== */
+/* ======================================================= */
+
+.knime-section h2,
+.knime-section h3 {
+  margin-top: 8px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #1d3a63;
+}
+
+.chart-container.knime-large {
+  height: 360px;
+}
+
+.chart-container.knime-heatmap {
+  height: 420px;
+}
+
+.chart-container.knime-area {
+  height: 350px;
+}
+
+.knime-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.knime-grid > div {
+  flex: 1;
+  min-width: 300px;
+}
+
+.knime-legend {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: #4a5873;
+}
+
+.covid-shade {
+  fill: #ffd9b3;
+  opacity: 0.35;
+}
+
+.heatmap-cell {
+  stroke: #ffffff;
+  stroke-width: 1px;
+}
+
+.heatmap-year-label {
+  fill: #4a5873;
+  font-size: 0.75rem;
+}
+
+.heatmap-state-label {
+  fill: #4a5873;
+  font-size: 0.75rem;
+}
+
+.knime-dot {
+  stroke: #ffffff;
+  stroke-width: 1px;
+  r: 4px;
+  fill: #2ca02c;
+}
+
+.knime-section {
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+.knime-block {
+  margin-bottom: 36px;
+}
+
+.knime-block h3 {
+  margin-bottom: 6px;
+}
+
+/* ====================================================================== */
+/* PROFESSIONAL BLUE THEME UPGRADE FOR KNIME CHARTS (Q2 / Q3 / Q5)        */
+/* ====================================================================== */
+
+/* --- Shared chart upgrades --- */
+.knime-chart svg {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.knime-chart .axis path,
+.knime-chart .axis line {
+  stroke: #d2d9e6;
+  stroke-width: 1.2px;
+}
+
+.knime-chart .axis text {
+  fill: #4b5873;
+  font-size: 0.78rem;
+}
+
+/* --- Trend Line (Q2) --- */
+.knime-line {
+  fill: none;
+  stroke: #3b6bbf;
+  stroke-width: 2.3px;
+}
+
+.knime-point {
+  fill: #3b6bbf;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  r: 4;
+  cursor: pointer;
+}
+
+.knime-point-improved {
+  fill: #2ecc71 !important; /* green highlight for improvement */
+  stroke: #ffffff;
+  stroke-width: 1.5px;
+}
+
+/* --- COVID Area (Q3) --- */
+.knime-area {
+  fill: rgba(255, 145, 77, 0.28);  /* soft orange highlight */
+  stroke: #ff914d;                 /* outline */
+  stroke-width: 2px;
+}
+
+.knime-covid-band {
+  fill: rgba(255, 190, 120, 0.35); /* pale peach for band */
+}
+
+.knime-covid-label {
+  font-size: 0.83rem;
+  font-weight: 600;
+  fill: #b85a26;
+  opacity: 0.9;
+}
+
+/* --- Heatmap (Q5) --- */
+.knime-heatmap rect {
+  stroke: #e8eef7;
+  stroke-width: 1px;
+}
+
+.knime-heatmap text {
+  font-size: 0.72rem;
+  fill: #4a5160;
+}
+
+/* Heatmap colour scale (blue theme) */
+.knime-heatmap-high {
+  fill: #0b3d91;   /* dark navy */
+}
+
+.knime-heatmap-mid {
+  fill: #4c80d0;   /* medium blue */
+}
+
+.knime-heatmap-low {
+  fill: #cfe0fb;   /* very light blue */
+}
+
+/* --- Tooltip (KNIME Charts) --- */
+.knime-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: #ffffff;
+  border: 1px solid #c9d4eb;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 0.78rem;
+  color: #2b3b52;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  z-index: 40;
+}

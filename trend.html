@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  <!-- HEADER -->
   <header class="site-header">
     <div class="site-header__top">
       <div class="site-header__brand">
@@ -23,7 +24,10 @@
     </nav>
   </header>
 
+  <!-- MAIN -->
   <main id="trend-page" class="page page--trend">
+
+    <!-- ⭐ ORIGINAL TREND SECTION -->
     <section class="page-inner dual-column">
       <section class="card trend-main">
         <h1 class="section-heading">Trends over Time</h1>
@@ -49,14 +53,8 @@
         </div>
 
         <div class="chart-block">
-          <div class="chart-block__header">
-            <h2 class="card-title">Offences over time</h2>
-            <p class="chart-description">
-              Annual mobile phone fines from all available years. Each line represents a
-              jurisdiction. Use this view to assess long-term improvements or increases in
-              enforcement.
-            </p>
-          </div>
+          <h2 class="card-title">Offences over time</h2>
+          <p class="chart-description">Annual mobile phone fines for all jurisdictions.</p>
           <div id="trTrendChart" class="chart-container chart-container--tall"></div>
         </div>
       </section>
@@ -64,31 +62,75 @@
       <aside class="card trend-side">
         <h3>Key observations</h3>
         <ul id="trObservations" class="observations-list">
-          <li>Lines trending downward indicate jurisdictions with improving offence rates.</li>
-          <li>Hover over the chart to see exact values for each year and jurisdiction.</li>
-          <li>Use the focus dropdown to highlight a specific jurisdiction.</li>
+          <li>Jurisdictions trending downward indicate improvement.</li>
+          <li>Hover to view detailed yearly values.</li>
+          <li>Use “Focus jurisdiction” to highlight single regions.</li>
         </ul>
 
         <h3>Analysis notes</h3>
         <p id="trAnalysis">
-          This trend analysis helps identify which jurisdictions demonstrate consistent improvement
-          (reductions in fines) over time and which show increasing enforcement activity. In your
-          report, you can quantify improvement using year-over-year percentage change and discuss
-          possible reasons for these trends.
+          This section helps measure long-term trends using yearly changes and slope detection.
         </p>
       </aside>
     </section>
+
+    <!-- ⭐ KNIME RESEARCH QUESTION SECTION -->
+    <section class="page-inner single-column">
+
+      <!-- Q2 -->
+      <section class="card knime-section">
+        <h2 class="card-title">Q2 — Long-Term Trend Analysis (KNIME)</h2>
+        <p class="chart-description">
+          Multi-year trend of fines by jurisdiction. Downward slopes indicate improvement.
+        </p>
+        <div id="knime-q2-trend" class="chart-container" style="height:330px;"></div>
+      </section>
+
+      <!-- Q3 -->
+      <section class="card knime-section">
+        <h2 class="card-title">Q3 — COVID-19 Impact on Enforcement (KNIME)</h2>
+        <p class="chart-description">
+          COVID period (2020–2021) highlighted with a shaded orange region.
+        </p>
+        <div id="knime-q3-covid" class="chart-container" style="height:340px;"></div>
+      </section>
+
+      <!-- Q5 -->
+      <section class="card knime-section">
+        <h2 class="card-title">Q5 — Jurisdiction Improvement Heatmap (KNIME)</h2>
+        <p class="chart-description">
+          Heatmap showing fines across jurisdictions × year. Darker = higher values.
+        </p>
+        <div id="knime-q5-heatmap" class="chart-container" style="height:300px;"></div>
+      </section>
+
+      <!-- ❌ SCATTER REMOVED -->
+
+    </section>
+
   </main>
 
+  <!-- FOOTER -->
   <footer class="site-footer">
-    <p>Data source: BITRE police enforcement fines dataset (mobile phone use offences).</p>
+    <p>Data source: BITRE police enforcement fines dataset (KNIME processed Outputs).</p>
   </footer>
 
+  <!-- OLD SYSTEM SCRIPTS -->
   <script src="js/utils.js"></script>
   <script src="js/chart_age.js"></script>
   <script src="js/chart_jurisdiction.js"></script>
   <script src="js/chart_month.js"></script>
   <script src="js/chart_trend.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- KNIME SCRIPTS -->
+  <script src="js/utils_knime.js"></script>
+  <script src="js/chart_trend_knime.js"></script>
+  <script src="js/chart_covid_area.js"></script>
+  <script src="js/chart_heatmap_q5.js"></script>
+
+  <!-- KNIME LOADER -->
+  <script src="js/main_knime.js"></script>
+
 </body>
 </html>
